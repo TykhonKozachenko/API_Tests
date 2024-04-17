@@ -1,0 +1,2402 @@
+{
+	"info": {
+		"_postman_id": "9a276d97-d344-4ac7-9ff9-8895475d31c2",
+		"name": "Conduit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Successful sign in",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "96307dd0-34d7-4af0-983a-de98832ff34b",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "51979521-bd85-41e1-8f6a-078c13f5dbd6",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "24ddd19f-3b88-4c54-9f5c-089cc3e2abc8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"email\": \"{{email}}\",\n    \"password\": \"Qwert123!_\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign in with non-existing credential",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "96307dd0-34d7-4af0-983a-de98832ff34b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "51979521-bd85-41e1-8f6a-078c13f5dbd6",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Invalid credentials\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.eql({",
+									"        \"email or password\": \"is invalid\"",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "b1578a61-14be-4dc4-a5d5-0c0db4a9642d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign in with empty email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "96307dd0-34d7-4af0-983a-de98832ff34b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "51979521-bd85-41e1-8f6a-078c13f5dbd6",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Blank email\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.eql({",
+									"        \"email\": \"can't be blank\"",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "aa051400-d33b-46ae-baa1-f104aa4faf60",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"email\": \"\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign in with empty password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "96307dd0-34d7-4af0-983a-de98832ff34b",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "51979521-bd85-41e1-8f6a-078c13f5dbd6",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Blank password\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.eql({",
+									"        \"password\": \"can't be blank\"",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "237e4bce-7846-4ff1-bf37-f72163b93c8b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"email\": \"{{email}}\",\n    \"password\": \"\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Successful sign up",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"const username = pm.variables.replaceIn('{{$randomUserName}}') + Math.floor(Math.random(1000) * 1000);",
+									"pm.environment.set('username', username.toLowerCase());",
+									"",
+									"const email = pm.variables.replaceIn('{{$randomEmail}}');",
+									"pm.environment.set('email', email);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "9eb0f60a-6dfd-41e7-a423-059f475cb743",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{username}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"Qwert123!_\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with taken username",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Username is taken\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username[0]).to.eql(\"This username is taken.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "7679ba61-63e8-4bf7-878f-0b4928398118",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{username}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with taken email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Email is taken\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email is taken.\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4f53593d-2502-4e5d-93d7-fcc76db253f2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{$randomUserName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with username starting from number",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"const randomNumber = Math.floor(Math.random(1000) * 1000);",
+									"const usernameStartingFromNumber = `${randomNumber}username`;",
+									"",
+									"pm.environment.set('usernameStartingFromNumber', usernameStartingFromNumber);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Username starting from number is invalid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username).to.eql([",
+									"        \"Username must start with a letter, have no spaces, and be at less than 40 characters.\",",
+									"        \"Username must start with a letter, have no spaces, and be 3 - 40 characters.\"",
+									"    ]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "39a24369-3fd1-4d4a-a8b5-a985b2ec49c3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{usernameStartingFromNumber}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with username with 2 symbols",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"const usernameWith2Symbols = Math.random().toString(36).substring(2, 4);",
+									"",
+									"pm.environment.set('usernameWith2Symbols', usernameWith2Symbols);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Username must be at least 3 characters\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username[0]).to.eql(\"Username must start with a letter, have no spaces, and be 3 - 40 characters.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "11fa38bf-d461-45dd-8e97-6c5bc11ccc18",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{usernameWith2Symbols}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with username with 41 symblos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"const usernameWith41Symbol = Array.from({ length: 41 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join('');",
+									"",
+									"pm.environment.set('usernameWith41Symbol', usernameWith41Symbol.toLowerCase());",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Username be at less than 40 characters\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username).to.eql([",
+									"      \"Username must start with a letter, have no spaces, and be at less than 40 characters.\",",
+									"      \"Username must start with a letter, have no spaces, and be 3 - 40 characters.\"",
+									"    ]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "cb762d86-f391-4e9f-bc8e-c460b1957a22",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{usernameWith41Symbol}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with username with spaces",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Username must have no spaces\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username[0]).to.eql(\"Username must start with a letter, have no spaces, and be 3 - 40 characters.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "29bd49d8-2376-4fca-8fd2-20761e4f649b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{$randomWord}} {{$randomWord}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with empty username",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Blank username\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.username[0]).to.eql(\"Username must start with a letter, have no spaces, and be 3 - 40 characters.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "134bd037-5fd3-4d87-bc6a-0b33df42ee1e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with empty email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Blank email\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email does not seem valid.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "c8a242dc-2193-4582-8630-6ef98393ab64",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with empty password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Blank password\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.eql({",
+									"        \"password\": \"can't be blank\"",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "c0b97f69-2fb9-4a99-b892-2a82a54fec66",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with email without @",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Email is invalid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email does not seem valid.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "e4e2e635-6c25-4542-b621-4e5675e4637e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"{{$randomFirstName}}gmail.com\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with email without .",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Email is invalid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email does not seem valid.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "124172fb-8fc4-4eef-9063-42bbb32b37c3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"{{$randomFirstName}}@gmailcom\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with email without name part",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Email is invalid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email does not seem valid.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "a3988225-7e59-4c71-8183-0f095a77ea8b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"@{{$randomDomainName}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up with email with more than 254 symbols",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d124f241-856e-414d-8489-7de5ed3f1ecd",
+								"exec": [
+									"eval(environment.randomUsername)();",
+									"",
+									"const longEmail = Array.from({ length: 255 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join('') + '@gmail.com';",
+									"",
+									"pm.environment.set('longEmail', longEmail.toLowerCase());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d82f4a-3ab5-4a92-8f0e-c5a8cd356d68",
+								"exec": [
+									"eval(globals.UnprocessableEntity)();",
+									"",
+									"pm.test(\"Email is invalid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors.email[0]).to.eql(\"This email does not seem valid.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "71fb6480-08b1-4458-b27b-a6427e6f08bd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\",\n    \"email\": \"{{longEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get info about user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "795bae5a-b4b9-40f7-ad7a-356ae1ef1a2b",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "d702daab-853c-4676-9809-63959f67e705",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "8dd806ca-f158-4a48-aadf-e9a832f7835e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();",
+									"",
+									"pm.test(\"Image is updated successfully\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.user.image).to.not.eql(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dd7e724b-152b-4290-b49d-960132031716",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"image\": \"{{$randomImageUrl}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's bio",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();",
+									"",
+									"pm.test(\"Bio is updated successfully\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.user.bio).to.not.eql(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "012f049e-7cec-49e5-a68e-15c0025f0341",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"bio\": \"{{$randomWords}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's username",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();",
+									"",
+									"eval(environment.randomUsername)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();",
+									"",
+									"var responseBody = pm.response.json();",
+									"var updatedUsername = pm.environment.get('randomUsername');",
+									"",
+									"pm.test(\"Username is updated successfully\", function() {",
+									"    pm.expect(responseBody.user.username).to.eql(updatedUsername);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f277647f-599e-421a-a075-f9097cbe7e2f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"{{randomUsername}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();",
+									"",
+									"const randomEmail = pm.variables.replaceIn('{{$randomEmail}}');",
+									"pm.environment.set('randomEmail', randomEmail.toLowerCase());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();",
+									"",
+									"var responseBody = pm.response.json();",
+									"var updatedEmail = pm.environment.get('randomEmail');",
+									"",
+									"pm.test(\"Email is updated successfully\", function() {",
+									"    pm.expect(responseBody.user.email).to.eql(updatedEmail);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "29448227-ce73-4045-9e63-4d4200ec4519",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"email\": \"{{randomEmail}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.userIsRegistered)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "1083b1f8-9b27-4c7f-a9c5-2b6a715ebc0a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"password\": \"{{$randomPassword}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update info about user without authorization",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4b77a2bb-9e5f-4308-b1da-2d69df8a9d0e",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e2bdc5f-3828-4f70-89b1-76efdf3e9805",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"  pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"User is not authorized\", function() {",
+									"  pm.expect(responseBody).to.include(\"Unauthorized\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f71ecdcf-461c-4fe5-9721-e6d270d942d7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user\": {\n    \"username\": \"helloooo123123\",\n    \"password\": \"{{$randomPassword}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}user"
+					},
+					"response": []
+				}
+			],
+			"id": "89698648-6e8c-463f-9d05-420123fbae8a"
+		},
+		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "Create an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.articleIsCreated)();",
+									"",
+									"pm.environment.set(\"slug\", pm.response.json().article.slug);",
+									"pm.environment.set(\"tag\", pm.response.json().article.tagList);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "157d2042-a117-4b41-9884-935af7c132f4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"article\": {\n      \"title\": \"article title\",\n      \"description\": \"description\",\n      \"body\": \"hello world\",\n      \"tagList\": [\"tag\"]\n   }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles"
+					},
+					"response": []
+				},
+				{
+					"name": "Update an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.articleIsCreated)();",
+									"",
+									"var responseBody = pm.response.json();",
+									"var expectedUpdate = \"updated description\";",
+									"",
+									"pm.test(\"Article is updated successfully\", function() {",
+									"    pm.expect(responseBody.article.description).to.eql(expectedUpdate);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "ba29ef6a-e7a5-4893-ad8a-67ee3c1c9201",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"article\": {\n      \"description\": \"updated description\"\n   }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)",
+									"",
+									"eval(environment.articleDeletion);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"pm.test(\"Article is deleted successfully\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 1000ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "38d33d2a-de73-4e62-8646-2bf42351209e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"eval(globals.articleIsCreated)();",
+									"",
+									"pm.test(\"Article is shown\", function() {",
+									"    pm.expect(pm.response.json()).to.have.property('article');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "5ac9f00c-76f8-463d-ac7c-37504a3497f0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get articles",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Articles are shown\", function() {",
+									"    pm.expect(pm.response.json()).to.have.property('articles');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "7e9b0476-192a-4715-8ac1-29a688090d37",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles"
+					},
+					"response": []
+				},
+				{
+					"name": "Get articles from Your feed",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Feed articles are shown\", function() {",
+									"    pm.expect(pm.response.json()).to.have.property('articles');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "b6c58c9c-a688-462a-858f-5f861f6b80bc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}articles/feed?limit=10&offset=0",
+							"host": [
+								"{{url}}articles"
+							],
+							"path": [
+								"feed"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get articles from Global feed",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Global feed articles are shown\", function() {",
+									"    pm.expect(pm.response.json()).to.have.property('articles');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "80e19255-d144-42ae-b976-81519b2f1a75",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}articles?limit=10&offset=0",
+							"host": [
+								"{{url}}articles"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get articles by tag",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a3bf21d-e461-4ee1-bc71-7705833f2ebe",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5525cca6-43dc-4f3d-b4b9-d288e4a07a56",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Articles with selected tag are shown\", function () {",
+									"    const responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody.articles).to.be.an('array').to.have.length.above(0);",
+									"",
+									"    responseBody.articles.forEach(article => {",
+									"        pm.expect(article.tagList).to.include(\"tag\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d83a6611-b78c-4ab3-8894-775f2fddf8bd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}articles?limit=10&tag={{tag}}&offset=0",
+							"host": [
+								"{{url}}articles"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "tag",
+									"value": "{{tag}}"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "62fff47b-2448-4bd7-abe1-cfb433954d21"
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get info about profile",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "386e403e-6154-4b16-8287-62adb7692cdd",
+								"exec": [
+									"eval(environment.registration)();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8944a415-1b81-406b-bf8d-d9d130392c79",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Profile information is shown correctly\", () => {",
+									"  pm.response.to.have.jsonBody('profile.username')",
+									"    .and.to.have.jsonBody('profile.bio')",
+									"    .and.to.have.jsonBody('profile.image')",
+									"    .and.to.have.jsonBody('profile.following')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "fceabd14-7f04-4d18-be70-0968bcfb5879",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}profiles/{{username}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Follow the user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "386e403e-6154-4b16-8287-62adb7692cdd",
+								"exec": [
+									"eval(environment.registration)();",
+									"setTimeout(function(){eval(environment.registration)()}, 1000)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8944a415-1b81-406b-bf8d-d9d130392c79",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"User is followed\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.profile.following).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "1895e066-feac-4570-84ad-66e15af6698e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}profiles/{{username}}/follow"
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow the user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "386e403e-6154-4b16-8287-62adb7692cdd",
+								"exec": [
+									"eval(environment.registration)();",
+									"setTimeout(function(){eval(environment.registration)()}, 1000)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8944a415-1b81-406b-bf8d-d9d130392c79",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"User is unfollowed\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.profile.following).to.eql(false);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "082a1876-02a9-4af0-b068-a4ebdd3aa0b1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}profiles/{{username}}/follow"
+					},
+					"response": []
+				}
+			],
+			"id": "1aa4c38a-e75e-41f0-82eb-5216a7598efa"
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Get tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2d58da29-7a57-459c-954b-e417ecd9ed64",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"All tags are shown\", function () {",
+									"  pm.expect(pm.response.text()).to.include(\"tags\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "5b4d6111-d4a4-4659-94b3-dc57e8aedfed",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}tags"
+					},
+					"response": []
+				}
+			],
+			"id": "16df61b4-3235-4249-b544-11e989b5c039"
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Get comments",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "02ee41ae-fccf-4243-980d-dbeac63fcf8c",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae297edb-0020-49db-a372-dab47d2cff2e",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.test(\"Comments are shown\", function () {",
+									"  pm.expect(pm.response.text()).to.include(\"comments\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f23c0c92-fb5b-4a4f-9122-2dd4c1756bf9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}/comments"
+					},
+					"response": []
+				},
+				{
+					"name": "Post a comment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "02ee41ae-fccf-4243-980d-dbeac63fcf8c",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae297edb-0020-49db-a372-dab47d2cff2e",
+								"exec": [
+									"eval(globals.OK)();",
+									"",
+									"pm.environment.set(\"commentID\", pm.response.json().comment.id);",
+									"",
+									"pm.test(\"Comment is posted\", () => {",
+									"  pm.response.to.have.jsonBody('comment.id')",
+									"    .and.to.have.jsonBody('comment.body')",
+									"    .and.to.have.jsonBody('comment.createdAt')",
+									"    .and.to.have.jsonBody('comment.updatedAt')",
+									"    .and.to.have.jsonBody('comment.author.username')",
+									"    .and.to.have.jsonBody('comment.author.bio')",
+									"    .and.to.have.jsonBody('comment.author.image')",
+									"    .and.to.have.jsonBody('comment.author.following')        ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "bd2e22e2-916c-4516-9841-1f5eec402322",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": {\n    \"body\": \"{{$randomLoremText}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}/comments"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a comment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "02ee41ae-fccf-4243-980d-dbeac63fcf8c",
+								"exec": [
+									"eval(environment.registration)()",
+									"setTimeout(function(){eval(environment.articleCreation)()}, 500)",
+									"setTimeout(function(){eval(environment.commentPost)()}, 1000)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae297edb-0020-49db-a372-dab47d2cff2e",
+								"exec": [
+									"pm.test(\"Сomment is deleted successfully\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 1000ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4b3adc7f-66ef-435b-b254-919e414d2d16",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}articles/{{slug}}/comments/{{commentID}}"
+					},
+					"response": []
+				}
+			],
+			"id": "d68cdcf9-838a-4e1e-9b60-2e81c5037ba4"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6a29f5b2-917d-40b7-ad3e-30c08a1e5b4f",
+				"type": "text/javascript",
+				"exec": [
+					"postman.setEnvironmentVariable('registration', ()=> {",
+					"  const url = pm.environment.get('url');",
+					"  const username = pm.variables.replaceIn('{{$randomUserName}}') + Math.floor(Math.random(1000) * 1000);",
+					"  const email = pm.variables.replaceIn('{{$randomEmail}}');",
+					"",
+					"  const registrationRequest = {",
+					"    url: url + 'users',",
+					"    method: 'POST',",
+					"    header: {",
+					"      'Content-Type': 'application/json',",
+					"    },",
+					"    body: {",
+					"      mode: 'raw',",
+					"      raw: JSON.stringify({",
+					"        \"user\": {",
+					"          \"username\": username,",
+					"          \"email\": email,",
+					"          \"password\": \"Qwert123!_\"",
+					"        }",
+					"      })",
+					"    }",
+					"  };",
+					"",
+					"  pm.sendRequest(registrationRequest, (error, response) => {",
+					"    console.log(error ? error : response.json());",
+					"    pm.environment.set(\"token\", response.json().user.token);",
+					"    pm.environment.set(\"email\", response.json().user.email);",
+					"    pm.environment.set(\"username\", response.json().user.username);",
+					"  });",
+					"});",
+					"",
+					"postman.setEnvironmentVariable('articleCreation', ()=> {",
+					"  const url = pm.environment.get('url');",
+					"  const token = pm.environment.get('token');",
+					"",
+					"  const createArticle = {",
+					"    url: url + 'articles',",
+					"    method: 'POST',",
+					"    header: {",
+					"      'Content-Type': 'application/json',",
+					"      'Authorization': 'Token ' + token,",
+					"    },",
+					"    body: {",
+					"      mode: 'raw',",
+					"      raw: JSON.stringify({",
+					"        \"article\": {",
+					"          \"title\": \"article title\",",
+					"          \"description\": \"description\",",
+					"          \"body\": \"hello world\",",
+					"          \"tagList\": [],",
+					"        }",
+					"      })",
+					"    }",
+					"  };",
+					"",
+					"  pm.sendRequest(createArticle, (error, response) => {",
+					"    console.log(error ? error : response.json());",
+					"    pm.environment.set('slug', response.json().article.slug);",
+					"  });",
+					"});",
+					"",
+					"postman.setEnvironmentVariable('articleDeletion', ()=> {",
+					"  const url = pm.environment.get('url');",
+					"  const slug = pm.environment.get('slug');",
+					"  const token = pm.environment.get('token');",
+					"",
+					"  const deleteArticle = {",
+					"    url: url + 'articles/' + slug,",
+					"    method: 'DELETE',",
+					"    header: {",
+					"      'Content-Type': 'application/json',",
+					"      'Authorization': 'Token ' + token,",
+					"    },",
+					"    body: {",
+					"      mode: 'none',",
+					"    }",
+					"  };",
+					"",
+					"  pm.sendRequest(deleteArticle, (error, response) => {",
+					"    console.log(error ? error : response.json());",
+					"  });",
+					"});",
+					"",
+					"postman.setEnvironmentVariable('commentPost', ()=> {",
+					"  const url = pm.environment.get('url');",
+					"  const slug = pm.environment.get('slug');",
+					"  const token = pm.environment.get('token');",
+					"  const id  =  pm.environment.get('commentID');",
+					"",
+					"  const commentPost = {",
+					"    url: url + 'articles/' + slug +  '/comments',",
+					"    method: 'POST',",
+					"    header: {",
+					"      'Content-Type': 'application/json',",
+					"      'Authorization': 'Token ' + token,",
+					"    },",
+					"    body: {",
+					"      mode: 'raw',",
+					"      raw: JSON.stringify({",
+					"        \"comment\": {",
+					"          \"body\": \"cool comment\",",
+					"        }",
+					"      })",
+					"    }",
+					"  };",
+					"",
+					"  pm.sendRequest(commentPost, (error, response) => {",
+					"    console.log(error ? error : response.json());",
+					"    pm.environment.set('commentID', response.json().comment.id);",
+					"  });",
+					"});",
+					"",
+					"postman.setEnvironmentVariable('randomUsername', ()=> {",
+					"  const randomUsernamePrefix = pm.variables.replaceIn('{{$randomUserName}}');",
+					"  const randomUsernameSuffix = Math.floor(Math.random() * 1000);",
+					"  const randomUsername = randomUsernamePrefix.replace(/\\./g, '') + randomUsernameSuffix;",
+					"",
+					"  pm.environment.set('randomUsername', randomUsername.toLowerCase());",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "69ae2f0a-b83b-4388-b613-c082c0805144",
+				"type": "text/javascript",
+				"exec": [
+					"postman.setGlobalVariable('OK', ()=> {",
+					"  pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"  });",
+					"  pm.test(\"Response time is less than 1000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+					"  });",
+					"});",
+					"",
+					"postman.setGlobalVariable('UnprocessableEntity', ()=> {",
+					"  pm.test(\"Status code is 422\", function () {",
+					"    pm.response.to.have.status(422);",
+					"  });",
+					"  pm.test(\"Response time is less than 1000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+					"  });",
+					"});",
+					"",
+					"postman.setGlobalVariable('userIsRegistered', ()=> {",
+					"  pm.test(\"All response properties are correct\", () => {",
+					"    pm.response.to.have.jsonBody('user.username')",
+					"      .and.to.have.jsonBody('user.email')",
+					"      .and.to.have.jsonBody('user.token')",
+					"      .and.to.have.jsonBody('user.bio')",
+					"      .and.to.have.jsonBody('user.image');",
+					"  });",
+					"});",
+					"",
+					"postman.setGlobalVariable('articleIsCreated', ()=> {",
+					"  pm.test(\"All article response properties are correct\", () => {",
+					"    pm.response.to.have.jsonBody('article.slug')",
+					"      .and.to.have.jsonBody('article.title')",
+					"      .and.to.have.jsonBody('article.description')",
+					"      .and.to.have.jsonBody('article.body')",
+					"      .and.to.have.jsonBody('article.createdAt')",
+					"      .and.to.have.jsonBody('article.updatedAt')",
+					"      .and.to.have.jsonBody('article.tagList')",
+					"      .and.to.have.jsonBody('article.favorited')",
+					"      .and.to.have.jsonBody('article.favoritesCount')",
+					"      .and.to.have.jsonBody('article.author.username')",
+					"      .and.to.have.jsonBody('article.author.bio')",
+					"      .and.to.have.jsonBody('article.author.image')",
+					"      .and.to.have.jsonBody('article.author.following')",
+					"  });",
+					"});",
+					""
+				]
+			}
+		}
+	]
+}
