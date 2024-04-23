@@ -1,6 +1,6 @@
 # API Tests
 
-### Conduit
+### Example
 - [JSON](https://github.com/TykhonKozachenko/API_Tests/blob/main/Conduit/Conduit.json)
 - Access to the [collection](https://api.postman.com/collections/32217972-9a276d97-d344-4ac7-9ff9-8895475d31c2?access_key=PMAT-01HQGSX9QYJ4WWAYQHPRVG03S1) (via API)
 - Access to the [environment](https://github.com/TykhonKozachenko/API_Tests/files/15010022/Conduit.postman_environment.json) (via JSON)
