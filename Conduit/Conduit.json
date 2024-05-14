@@ -2218,8 +2218,9 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "6a29f5b2-917d-40b7-ad3e-30c08a1e5b4f",
+				"id": "b9a23d88-0265-4733-b47f-b568747cea8a",
 				"type": "text/javascript",
+				"packages": {},
 				"exec": [
 					"postman.setEnvironmentVariable('registration', ()=> {",
 					"  const url = pm.environment.get('url');",
@@ -2346,8 +2347,9 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "69ae2f0a-b83b-4388-b613-c082c0805144",
+				"id": "de808645-8679-4842-9514-1f5881e1e14f",
 				"type": "text/javascript",
+				"packages": {},
 				"exec": [
 					"postman.setGlobalVariable('OK', ()=> {",
 					"  pm.test(\"Status code is 200\", function () {",
